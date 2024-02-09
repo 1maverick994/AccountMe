@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AccountME.Service.Tests
+namespace AccountMe.Service.Tests
 {
     public class Repository : IRepository
     {

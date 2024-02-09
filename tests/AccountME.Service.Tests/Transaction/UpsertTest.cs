@@ -2,6 +2,7 @@
 using AccountMe.Service.Transaction.Commands;
 using AccountMe.Service.Transaction.Handlers;
 using FakeItEasy;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.Transaction
+namespace AccountMe.Service.Tests.Transaction
 {
 
     [Xunit.TraitAttribute("Service", "UpsertAccount")]
@@ -22,7 +23,8 @@ namespace AccountME.Service.Tests.Transaction
         public UpsertTest()
         {
             _AccountRepository = new Repository();
-            _testee = new UpsertHandler(_AccountRepository);
+            var mediator = new Fake<IMediator>();
+            _testee = new UpsertHandler(_AccountRepository, mediator.FakedObject);
         }
 
         

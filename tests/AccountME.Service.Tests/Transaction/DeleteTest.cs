@@ -2,6 +2,7 @@
 using AccountMe.Service.Transaction.Commands;
 using AccountMe.Service.Transaction.Handlers;
 using FakeItEasy;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.Transaction
+namespace AccountMe.Service.Tests.Transaction
 {
 
     [Xunit.TraitAttribute("Service", "DeleteAccount")]
@@ -23,9 +24,9 @@ namespace AccountME.Service.Tests.Transaction
         public DeleteTest()
         {
             _AccountRepository = new Repository();
-
-            _testee = new DeleteHandler(_AccountRepository);
-            _upsertHandler = new UpsertHandler(_AccountRepository);
+            var mediator = new Fake<IMediator>();
+            _testee = new DeleteHandler(_AccountRepository, mediator.FakedObject);
+            _upsertHandler = new UpsertHandler(_AccountRepository, mediator.FakedObject);
         }
 
 

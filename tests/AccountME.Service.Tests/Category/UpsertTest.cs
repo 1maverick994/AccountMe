@@ -10,7 +10,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.Category
+namespace AccountMe.Service.Tests.Category
 {
 
     [Xunit.TraitAttribute("Service", "UpsertCategory")]

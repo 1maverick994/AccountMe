@@ -7,15 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMe.API", "src\Accoun
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6361961F-7BB3-4886-87AF-C67ED1EBD375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMe.Models", "src\AccountMe.Models\AccountMe.Models.csproj", "{DA68AC6C-74FC-4425-A327-96ABDC9D3346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMe.Models", "src\AccountMe.Models\AccountMe.Models.csproj", "{DA68AC6C-74FC-4425-A327-96ABDC9D3346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMe.Service", "src\AccountMe.Service\AccountMe.Service.csproj", "{6127F38D-06D9-4BA9-9BE7-158CFEFD585D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMe.Service", "src\AccountMe.Service\AccountMe.Service.csproj", "{6127F38D-06D9-4BA9-9BE7-158CFEFD585D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMe.Infrastructure", "src\AccountMe.Infrastructure\AccountMe.Infrastructure.csproj", "{11B55D94-479A-43BC-8172-2F7DAA64B1BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMe.Infrastructure", "src\AccountMe.Infrastructure\AccountMe.Infrastructure.csproj", "{11B55D94-479A-43BC-8172-2F7DAA64B1BE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E632C5B2-FDD0-441F-AC6F-D1AEEA656880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountME.Service.Tests", "tests\AccountME.Service.Tests\AccountME.Service.Tests.csproj", "{BA426A9C-1692-4B78-8777-DABEF4CDA86E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMe.Service.Tests", "tests\AccountME.Service.Tests\AccountMe.Service.Tests.csproj", "{BA426A9C-1692-4B78-8777-DABEF4CDA86E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

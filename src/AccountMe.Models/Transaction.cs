@@ -13,6 +13,8 @@
 
         public Category? Category { get; set; }
 
+        public TransactionType Type { get; set; }
+
         public int GetKey()
         {
             return Id;

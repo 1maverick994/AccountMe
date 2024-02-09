@@ -10,7 +10,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.Account
+namespace AccountMe.Service.Tests.Account
 {
 
     [Xunit.TraitAttribute("Service", "UpsertAccount")]

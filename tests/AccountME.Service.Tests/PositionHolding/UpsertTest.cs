@@ -10,7 +10,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.PositionHolding
+namespace AccountMe.Service.Tests.PositionHolding
 {
 
     [Xunit.TraitAttribute("Service", "UpsertPositionHolding")]

@@ -10,7 +10,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountME.Service.Tests.Position
+namespace AccountMe.Service.Tests.Position
 {
 
     [Xunit.TraitAttribute("Service", "DeleteAccount")]

@@ -3,9 +3,9 @@
     public interface IRepository
     {
 
-        public Task<IEnumerable<IRepositoryItem>> GetAllAsync();
+        public Task<IEnumerable<IRepositoryItem>> GetAllAsync(Type itemType);
 
-        public Task<IRepositoryItem>? GetByKey(int key);
+        public Task<IRepositoryItem>? GetByKey(Type itemType, int key);
 
         public Task<IRepositoryItem> Insert(IRepositoryItem entity);
 

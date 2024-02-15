@@ -1,4 +1,4 @@
-﻿using AccountMe;
+﻿using AccountMe.Service.Tests.Fixtures;
 using AccountMe.Service.User.Commands;
 using AccountMe.Service.User.Handlers;
 using FakeItEasy;
@@ -10,19 +10,20 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountMe.Service.Tests.User
+namespace AccountMe.Service.Tests.Entities.User
 {
 
-    [Xunit.TraitAttribute("Service", "DeleteUser")]
+    [Trait("Service", "DeleteUser")]
+    [Collection("Repository collection")]
     public class DeleteTest
     {
         private readonly DeleteHandler _testee;
         private readonly UpsertHandler _upsertHandler;
         private readonly Repository _UserRepository;
 
-        public DeleteTest()
+        public DeleteTest(RepositoryFixture repository)
         {
-            _UserRepository = new Repository();
+            _UserRepository = repository.Repository;
 
             _testee = new DeleteHandler(_UserRepository);
             _upsertHandler = new UpsertHandler(_UserRepository);
@@ -34,7 +35,7 @@ namespace AccountMe.Service.Tests.User
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.User()
+            var t1 = new Models.User()
             {
                 Id = key,
                 Username = "Test",
@@ -42,7 +43,7 @@ namespace AccountMe.Service.Tests.User
 
             var cmd0 = new UpsertCommand() { User = t1 };
             await _upsertHandler.Handle(cmd0, CancellationToken.None);
-            var count = _UserRepository.GetAllAsync().Result.Count();
+            var count = _UserRepository.GetAllAsync(typeof(Models.User)).Result.Count();
 
             var cmd1 = new DeleteCommand() { User = t1 };
 
@@ -50,8 +51,8 @@ namespace AccountMe.Service.Tests.User
             await _testee.Handle(cmd1, CancellationToken.None);
 
             //Assert            
-            Assert.Equal(count - 1, _UserRepository.GetAllAsync().Result.Count());
-            Assert.Null(_UserRepository.GetByKey(key)?.Result);
+            Assert.Equal(count - 1, _UserRepository.GetAllAsync(typeof(Models.User)).Result.Count());
+            Assert.Null(_UserRepository.GetByKey(typeof(Models.User), key)?.Result);
 
         }
 
@@ -60,13 +61,13 @@ namespace AccountMe.Service.Tests.User
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.User()
+            var t1 = new Models.User()
             {
                 Id = key,
                 Username = "Test",
             };
-            
-            var count = _UserRepository.GetAllAsync().Result.Count();
+
+            var count = _UserRepository.GetAllAsync(typeof(Models.User)).Result.Count();
 
             var cmd1 = new DeleteCommand() { User = t1 };
 
@@ -74,8 +75,8 @@ namespace AccountMe.Service.Tests.User
             var act = _testee.Handle(cmd1, CancellationToken.None);
 
             // Assert
-            await Assert.ThrowsAnyAsync<Exception>(()=> act);
-            
+            await Assert.ThrowsAnyAsync<Exception>(() => act);
+
         }
 
     }

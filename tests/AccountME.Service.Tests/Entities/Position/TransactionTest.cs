@@ -1,6 +1,6 @@
-﻿using AccountMe;
-using AccountMe.Service.Position.Commands;
+﻿using AccountMe.Service.Position.Commands;
 using AccountMe.Service.Position.Handlers;
+using AccountMe.Service.Tests.Fixtures;
 using AccountMe.Service.Transaction.Events;
 using FakeItEasy;
 using MediatR;
@@ -13,23 +13,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit.Sdk;
 
-namespace AccountMe.Service.Tests.Position
+namespace AccountMe.Service.Tests.Entities.Position
 {
 
-    [Xunit.TraitAttribute("Position", "Transaction")]
+    [Trait("Position", "Transaction")]
+    [Collection("Repository collection")]
     public class TransactionTest
     {
-        private readonly AccountMe.Service.Transaction.Handlers.UpsertHandler _testee;
+        private readonly Service.Transaction.Handlers.UpsertHandler _testee;
         private readonly Repository _AccountRepository;
         private readonly IMediator _mediator;
 
-        public TransactionTest()
+        public TransactionTest(RepositoryFixture repository)
         {
-            _AccountRepository = new Repository();
+            _AccountRepository = repository.Repository;
             _mediator = A.Fake<IMediator>();
-            _testee = new AccountMe.Service.Transaction.Handlers.UpsertHandler(_AccountRepository, _mediator);
-           
+            _testee = new Service.Transaction.Handlers.UpsertHandler(_AccountRepository, _mediator);
+
         }
+
 
 
         [Fact(DisplayName = "InsertIncome")]
@@ -38,20 +40,10 @@ namespace AccountMe.Service.Tests.Position
 
             //Arrange
             const decimal p1InitialBalance = 100;
-            var p1 = new AccountMe.Models.Position()
-            {
-                Id = 1,
-                Name = "position1",
-                Balance = p1InitialBalance
-            };
+            var p1 = new Models.Position(1, "position1", p1InitialBalance);
 
             const decimal eventAmount = 100;
-            var eventt = new UpsertDeleteEvent()
-            {
-                PositionInId = p1.Id,
-                Amount = eventAmount,
-                TransactionType = TransactionType.Income
-            };
+            var eventt = new UpsertDeleteEvent() { PositionInId = p1.Id, Amount = eventAmount, TransactionType = TransactionType.Income };
 
             var handler = new TransactionUpsertDeleteHandler(_AccountRepository, _mediator);
 
@@ -86,20 +78,10 @@ namespace AccountMe.Service.Tests.Position
 
             //Arrange
             const decimal p1InitialBalance = 100;
-            var p1 = new AccountMe.Models.Position()
-            {
-                Id = 2,
-                Name = "position2",
-                Balance = p1InitialBalance
-            };
+            var p1 = new Models.Position(2, "position2", p1InitialBalance);
 
             const decimal eventAmount = 100;
-            var eventt = new UpsertDeleteEvent()
-            {
-                PositionOutId = p1.Id,
-                Amount = eventAmount,
-                TransactionType = TransactionType.Outcome
-            };
+            var eventt = new UpsertDeleteEvent() { PositionOutId = p1.Id, Amount = eventAmount, TransactionType = TransactionType.Outcome };
 
             var handler = new TransactionUpsertDeleteHandler(_AccountRepository, _mediator);
 
@@ -133,29 +115,13 @@ namespace AccountMe.Service.Tests.Position
         {
 
             //Arrange
-            const decimal pInitialBalance = 100;
-            var p3 = new AccountMe.Models.Position()
-            {
-                Id = 3,
-                Name = "position3",
-                Balance = pInitialBalance
-            };
-
-            var p4 = new AccountMe.Models.Position()
-            {
-                Id = 4,
-                Name = "position4",
-                Balance = pInitialBalance
-            };
+            const decimal p3InitialBalance = 100;
+            const decimal p4InitialBalance = 7465;
+            var p3 = new Models.Position(3, "position3", p3InitialBalance);
+            var p4 = new Models.Position(4, "position4", p4InitialBalance);
 
             const decimal eventAmount = 100;
-            var eventt = new UpsertDeleteEvent()
-            {
-                PositionOutId = p3.Id,
-                PositionInId = p4.Id,
-                Amount = eventAmount,
-                TransactionType = TransactionType.Transfer
-            };
+            var eventt = new UpsertDeleteEvent() { PositionOutId = p3.Id, PositionInId = p4.Id, Amount = eventAmount, TransactionType = TransactionType.Transfer };
 
             var handler = new TransactionUpsertDeleteHandler(_AccountRepository, _mediator);
 
@@ -180,16 +146,18 @@ namespace AccountMe.Service.Tests.Position
 
             Assert.Equal(2, positionUpsertCommands.Count);
 
-            var upsertP3 = positionUpsertCommands.First(us=> us.Position.Id == p3.Id);
+            var upsertP3 = positionUpsertCommands.First(us => us.Position.Id == p3.Id);
             var upsertP4 = positionUpsertCommands.First(us => us.Position.Id == p4.Id);
 
-            Assert.Equal(pInitialBalance - eventAmount, upsertP3.Position.Balance);
-            Assert.Equal(pInitialBalance + eventAmount, upsertP4.Position.Balance);
+            Assert.Equal(p3InitialBalance - eventAmount, upsertP3.Position.Balance);
+            Assert.Equal(p4InitialBalance + eventAmount, upsertP4.Position.Balance);
 
 
 
         }
 
+        // Todo
+        // - testare modifica e cancellazione delle transazioni
 
 
     }

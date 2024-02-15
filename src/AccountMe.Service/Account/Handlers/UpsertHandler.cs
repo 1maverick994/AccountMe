@@ -14,7 +14,7 @@ namespace AccountMe.Service.Account.Handlers
 
         public async Task<Models.Account> Handle(UpsertCommand request, CancellationToken cancellationToken)
         {
-            if (request.Account.Id > 0 && repository.GetByKey(request.Account.Id) != null)
+            if (request.Account.Id > 0 && repository.GetByKey(typeof(Models.Account), request.Account.Id) != null)
             {
                 return (Models.Account)await repository.Update(request.Account);
             }

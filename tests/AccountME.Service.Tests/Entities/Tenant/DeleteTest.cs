@@ -1,6 +1,6 @@
-﻿using AccountMe;
-using AccountMe.Service.Tenant.Commands;
+﻿using AccountMe.Service.Tenant.Commands;
 using AccountMe.Service.Tenant.Handlers;
+using AccountMe.Service.Tests.Fixtures;
 using FakeItEasy;
 using System;
 using System.Collections.Generic;
@@ -10,19 +10,20 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountMe.Service.Tests.Tenant
+namespace AccountMe.Service.Tests.Entities.Tenant
 {
 
-    [Xunit.TraitAttribute("Service", "DeleteTenant")]
+    [Trait("Service", "DeleteTenant")]
+    [Collection("Repository collection")]
     public class DeleteTest
     {
         private readonly DeleteHandler _testee;
         private readonly UpsertHandler _upsertHandler;
         private readonly Repository _tenantRepository;
 
-        public DeleteTest()
+        public DeleteTest(RepositoryFixture repository)
         {
-            _tenantRepository = new Repository();
+            _tenantRepository = repository.Repository;
 
             _testee = new DeleteHandler(_tenantRepository);
             _upsertHandler = new UpsertHandler(_tenantRepository);
@@ -34,7 +35,7 @@ namespace AccountMe.Service.Tests.Tenant
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.Tenant()
+            var t1 = new Models.Tenant()
             {
                 Id = key,
                 Name = "Test",
@@ -42,7 +43,7 @@ namespace AccountMe.Service.Tests.Tenant
 
             var cmd0 = new UpsertCommand() { Tenant = t1 };
             await _upsertHandler.Handle(cmd0, CancellationToken.None);
-            var count = _tenantRepository.GetAllAsync().Result.Count();
+            var count = _tenantRepository.GetAllAsync(typeof(Models.Tenant)).Result.Count();
 
             var cmd1 = new DeleteCommand() { Tenant = t1 };
 
@@ -50,8 +51,8 @@ namespace AccountMe.Service.Tests.Tenant
             await _testee.Handle(cmd1, CancellationToken.None);
 
             //Assert            
-            Assert.Equal(count - 1, _tenantRepository.GetAllAsync().Result.Count());
-            Assert.Null(_tenantRepository.GetByKey(key)?.Result);
+            Assert.Equal(count - 1, _tenantRepository.GetAllAsync(typeof(Models.Tenant)).Result.Count());
+            Assert.Null(_tenantRepository.GetByKey(typeof(Models.Tenant), key)?.Result);
 
         }
 
@@ -60,13 +61,13 @@ namespace AccountMe.Service.Tests.Tenant
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.Tenant()
+            var t1 = new Models.Tenant()
             {
                 Id = key,
                 Name = "Test",
             };
-            
-            var count = _tenantRepository.GetAllAsync().Result.Count();
+
+            var count = _tenantRepository.GetAllAsync(typeof(Models.Tenant)).Result.Count();
 
             var cmd1 = new DeleteCommand() { Tenant = t1 };
 
@@ -74,8 +75,8 @@ namespace AccountMe.Service.Tests.Tenant
             var act = _testee.Handle(cmd1, CancellationToken.None);
 
             // Assert
-            await Assert.ThrowsAnyAsync<Exception>(()=> act);
-            
+            await Assert.ThrowsAnyAsync<Exception>(() => act);
+
         }
 
     }

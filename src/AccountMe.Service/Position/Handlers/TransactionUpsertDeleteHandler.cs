@@ -20,7 +20,7 @@ namespace AccountMe.Service.Position.Handlers
 
                 if (notification.PreviousPositionInId.HasValue)
                 {
-                    var position = (Models.Position)await repository.GetByKey(notification.PreviousPositionInId.Value);
+                    var position = (Models.Position)await repository.GetByKey(typeof(Models.Position), notification.PreviousPositionInId.Value);
                     if (position != null)
                     {
                         position.Balance -= notification.PreviousAmount.Value;
@@ -34,7 +34,7 @@ namespace AccountMe.Service.Position.Handlers
 
                 if (notification.PreviousPositionOutId.HasValue)
                 {
-                    var position = (Models.Position)await repository.GetByKey(notification.PreviousPositionOutId.Value);
+                    var position = (Models.Position)await repository.GetByKey(typeof(Models.Position), notification.PreviousPositionOutId.Value);
                     if (position != null)
                     {
                         position.Balance += notification.PreviousAmount.Value;
@@ -53,7 +53,7 @@ namespace AccountMe.Service.Position.Handlers
 
                 if (notification.PositionInId.HasValue)
                 {
-                    var position = (Models.Position)await repository.GetByKey(notification.PositionInId.Value);
+                    var position = (Models.Position)await repository.GetByKey(typeof(Models.Position), notification.PositionInId.Value);
                     if (position != null)
                     {
                         position.Balance += notification.Amount.Value;
@@ -67,7 +67,7 @@ namespace AccountMe.Service.Position.Handlers
 
                 if (notification.PositionOutId.HasValue)
                 {
-                    var position = (Models.Position)await repository.GetByKey(notification.PositionOutId.Value);
+                    var position = (Models.Position)await repository.GetByKey(typeof(Models.Position), notification.PositionOutId.Value);
                     if (position != null)
                     {
                         position.Balance -= notification.Amount.Value;

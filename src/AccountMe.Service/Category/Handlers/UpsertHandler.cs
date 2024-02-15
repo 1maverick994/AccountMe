@@ -14,7 +14,7 @@ namespace AccountMe.Service.Category.Handlers
 
         public async Task<Models.Category> Handle(UpsertCommand request, CancellationToken cancellationToken)
         {
-            if (request.Category.Id > 0 && repository.GetByKey(request.Category.Id) != null)
+            if (request.Category.Id > 0 && repository.GetByKey(typeof(Models.Category), request.Category.Id) != null)
             {
                 return (Models.Category)await repository.Update(request.Category);
             }

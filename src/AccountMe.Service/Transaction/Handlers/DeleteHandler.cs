@@ -18,9 +18,9 @@ namespace AccountMe.Service.Transaction.Handlers
         {
             var domainEvent = new UpsertDeleteEvent();
 
-            if (request.Transaction.Id > 0 && repository.GetByKey(request.Transaction.Id) != null)
+            if (request.Transaction.Id > 0 && repository.GetByKey(typeof(Models.Transaction), request.Transaction.Id) != null)
             {
-                var currentTr = (Models.Transaction)await repository.GetByKey(request.Transaction.Id);
+                var currentTr = (Models.Transaction)await repository.GetByKey(typeof(Models.Transaction), request.Transaction.Id);
                 domainEvent.PreviousTransactionType = currentTr.Type;
                 domainEvent.PreviousPositionInId = currentTr.PositionIn?.Id;
                 domainEvent.PreviousPositionOutId = currentTr.PositionOut?.Id;

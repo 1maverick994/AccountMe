@@ -1,6 +1,6 @@
-﻿using AccountMe;
-using AccountMe.Service.PositionHolding.Commands;
+﻿using AccountMe.Service.PositionHolding.Commands;
 using AccountMe.Service.PositionHolding.Handlers;
+using AccountMe.Service.Tests.Fixtures;
 using FakeItEasy;
 using System;
 using System.Collections.Generic;
@@ -10,19 +10,20 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountMe.Service.Tests.PositionHolding
+namespace AccountMe.Service.Tests.Entities.PositionHolding
 {
 
-    [Xunit.TraitAttribute("Service", "DeletePositionHolding")]
+    [Trait("Service", "DeletePositionHolding")]
+    [Collection("Repository collection")]
     public class DeleteTest
     {
         private readonly DeleteHandler _testee;
         private readonly UpsertHandler _upsertHandler;
         private readonly Repository _PositionHoldingRepository;
 
-        public DeleteTest()
+        public DeleteTest(RepositoryFixture repository)
         {
-            _PositionHoldingRepository = new Repository();
+            _PositionHoldingRepository = repository.Repository;
 
             _testee = new DeleteHandler(_PositionHoldingRepository);
             _upsertHandler = new UpsertHandler(_PositionHoldingRepository);
@@ -34,7 +35,7 @@ namespace AccountMe.Service.Tests.PositionHolding
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.PositionHolding()
+            var t1 = new Models.PositionHolding()
             {
                 Id = key,
                 Quota = 70,
@@ -42,7 +43,7 @@ namespace AccountMe.Service.Tests.PositionHolding
 
             var cmd0 = new UpsertCommand() { PositionHolding = t1 };
             await _upsertHandler.Handle(cmd0, CancellationToken.None);
-            var count = _PositionHoldingRepository.GetAllAsync().Result.Count();
+            var count = _PositionHoldingRepository.GetAllAsync(typeof(Models.PositionHolding)).Result.Count();
 
             var cmd1 = new DeleteCommand() { PositionHolding = t1 };
 
@@ -50,8 +51,8 @@ namespace AccountMe.Service.Tests.PositionHolding
             await _testee.Handle(cmd1, CancellationToken.None);
 
             //Assert            
-            Assert.Equal(count - 1, _PositionHoldingRepository.GetAllAsync().Result.Count());
-            Assert.Null(_PositionHoldingRepository.GetByKey(key)?.Result);
+            Assert.Equal(count - 1, _PositionHoldingRepository.GetAllAsync(typeof(Models.PositionHolding)).Result.Count());
+            Assert.Null(_PositionHoldingRepository.GetByKey(typeof(Models.PositionHolding), key)?.Result);
 
         }
 
@@ -60,13 +61,13 @@ namespace AccountMe.Service.Tests.PositionHolding
         {
             int key = 1;
             //Arrange
-            var t1 = new AccountMe.Models.PositionHolding()
+            var t1 = new Models.PositionHolding()
             {
                 Id = key,
                 Quota = 70,
             };
-            
-            var count = _PositionHoldingRepository.GetAllAsync().Result.Count();
+
+            var count = _PositionHoldingRepository.GetAllAsync(typeof(Models.PositionHolding)).Result.Count();
 
             var cmd1 = new DeleteCommand() { PositionHolding = t1 };
 
@@ -74,8 +75,8 @@ namespace AccountMe.Service.Tests.PositionHolding
             var act = _testee.Handle(cmd1, CancellationToken.None);
 
             // Assert
-            await Assert.ThrowsAnyAsync<Exception>(()=> act);
-            
+            await Assert.ThrowsAnyAsync<Exception>(() => act);
+
         }
 
     }

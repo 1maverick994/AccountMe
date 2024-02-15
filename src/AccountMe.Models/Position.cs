@@ -15,5 +15,18 @@
         {
             return Id;
         }
+
+        public Position()
+        {
+                
+        }
+
+
+        public Position(int id, string name, decimal balance)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Balance = balance;
+        }
     }
 }

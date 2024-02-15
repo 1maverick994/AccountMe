@@ -14,7 +14,7 @@ namespace AccountMe.Service.Tenant.Handlers
 
         public async Task<Models.Tenant> Handle(UpsertCommand request, CancellationToken cancellationToken)
         {
-            if (request.Tenant.Id > 0 && repository.GetByKey(request.Tenant.Id) != null)
+            if (request.Tenant.Id > 0 && repository.GetByKey(typeof(Models.Tenant), request.Tenant.Id) != null)
             {
                 return (Models.Tenant)await repository.Update(request.Tenant);
             }

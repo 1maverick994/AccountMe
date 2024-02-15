@@ -14,7 +14,7 @@ namespace AccountMe.Service.Position.Handlers
 
         public async Task<Models.Position> Handle(UpsertCommand request, CancellationToken cancellationToken)
         {
-            if (request.Position.Id > 0 && repository.GetByKey(request.Position.Id) != null)
+            if (request.Position.Id > 0 && repository.GetByKey(typeof(Models.Position), request.Position.Id) != null)
             {
                 return (Models.Position)await repository.Update(request.Position);
             }
